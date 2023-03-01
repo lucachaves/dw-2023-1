@@ -6,3 +6,15 @@ html {
 ul, ol {
   color: green;
 }
+
+#front-end-paragraph {
+  color:darkred;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-italic {
+  font-style: italic;
+}
