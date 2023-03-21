@@ -5,15 +5,15 @@ describe('Calculator', () => {
     expect(calc(1, 1, '+')).toBe(2);
   });
 
-  test.skip('subtracting 1 - 1', () => {
+  test('subtracting 1 - 1', () => {
     expect(calc(1, 1, '-')).toBe(0);
   });
 
-  test.skip('multiplying 1 * 1', () => {
+  test('multiplying 1 * 1', () => {
     expect(calc(1, 1, '*')).toBe(1);
   });
 
-  test.skip('dividing 1 / 1', () => {
+  test('dividing 1 / 1', () => {
     expect(calc(1, 1, '/')).toBe(1);
   });
 });
