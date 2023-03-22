@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "scripts": {
+    "print": "node calc.print.js",
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
+}
