@@ -5,7 +5,7 @@ x = 10;
 
 // console.log(x);
 
-// const declartion
+// const declaration
 const number = 10;
 
 // let declaration
@@ -22,7 +22,7 @@ var name = 'John';
 // TypeError: Assignment to constant variable.
 // number = 20;
 
-// const: not imutable
+// const: not immutable
 const numbers = [1, 2, 3];
 
 numbers[0] = 10;
