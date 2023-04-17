@@ -1,0 +1,30 @@
+@host = http://localhost:3000
+
+### Create Host
+POST {{host}}/hosts
+Content-Type: application/json
+
+{
+  "ip": "1.1.1.1",
+  "mask": "255.0.0.0",
+  "version": "v4"
+}
+
+### Read all Host
+GET {{host}}/hosts
+
+### Read Host by id
+GET {{host}}/hosts/1
+
+### Update Host
+PUT {{host}}/hosts/4
+Content-Type: application/json
+
+{
+  "ip": "8.8.8.8",
+  "mask": "255.0.0.0",
+  "version": "v4"
+}
+
+### Delete Host
+DELETE {{host}}/hosts/4
