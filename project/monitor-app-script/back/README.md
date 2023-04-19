@@ -78,3 +78,7 @@ Content-Type: application/json
 ### Delete a Host
 DELETE {{jsonServer}}/hosts/{{createdHostId}}
 ```
+
+A figura abaixo mostra o resultado da execução do REST Client:
+
+![REST Client](./docs/server.png)

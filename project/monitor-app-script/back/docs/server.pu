@@ -1,0 +1,31 @@
+@startuml
+title JSON Server
+hide footbox
+skinparam monochrome true
+
+Client -> Server: HTTP Request
+note right: GET /hosts HTTP/1.1\nHost: 127.0.0.1:3000
+Server -> Client: HTTP Response
+note left: HTTP/1.1 200 OK\n\n[\n  {\n    "id": 1,\n    "name": "Cloudflare DNS",\n    "address": "1.1.1.1"\n  },\n  {\n    "id": 2,\n    "name": "Google DNS",\n    "address": "8.8.8.8"\n  }\n]
+
+Client -> Server: HTTP Request
+note right: GET /hosts/1 HTTP/1.1\nHost: 127.0.0.1:3000
+Server -> Client: HTTP Response
+note left: HTTP/1.1 200 OK\n\n{\n  "id": 1,\n  "name": "Cloudflare DNS",\n  "address": "1.1.1.1"\n}
+
+Client -> Server: HTTP Request
+note right: POST /hosts HTTP/1.1\nHost: 127.0.0.1:3000\nContent-Type: application/json\n\n{\n  "name": "Google",\n  "address": "www.google.com"\n}
+Server -> Client: HTTP Response
+note left: HTTP/1.1 201 Created\n\n{\n  "id": 3,\n  "name": "Google",\n  "address": "www.google.com"\n}
+
+Client -> Server: HTTP Request
+note right: PUT /hosts/3 HTTP/1.1\nHost: 127.0.0.1:3000\nContent-Type: application/json\n\n{\n  "name": "Google Search",\n  "address": "www.google.com"\n}
+Server -> Client: HTTP Response
+note left: HTTP/1.1 200 OK\n\n{\n  "id": 3,\n  "name": "Google Search",\n  "address": "www.google.com"\n}
+
+Client -> Server: HTTP Request
+note right: DELETE /hosts/3 HTTP/1.1\nHost: 127.0.0.1:3000
+Server -> Client: HTTP Response
+note left: HTTP/1.1 200 OK\n\n{}
+
+@enduml
