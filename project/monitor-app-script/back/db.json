@@ -1,0 +1,14 @@
+{
+  "hosts": [
+    {
+      "id": 2,
+      "name": "Cloudflare DNS",
+      "address": "1.1.1.1"
+    },
+    {
+      "name": "Google DNS",
+      "address": "8.8.8.8",
+      "id": 3
+    }
+  ]
+}
