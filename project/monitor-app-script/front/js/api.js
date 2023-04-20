@@ -1,7 +1,7 @@
 const server = 'http://localhost:3000';
 
-async function create(host) {
-  const res = await fetch(`${server}/hosts`, {
+async function create(path, host) {
+  const res = await fetch(`${server}${path}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -12,20 +12,20 @@ async function create(host) {
   return await res.json();
 }
 
-async function read() {
-  const res = await fetch(`${server}/hosts`);
+async function read(path) {
+  const res = await fetch(`${server}${path}`);
 
   return await res.json();
 }
 
-async function readById(id) {
-  const res = await fetch(`${server}/hosts/${id}`);
+async function readById(path, id) {
+  const res = await fetch(`${server}${path}/${id}`);
 
   return await res.json();
 }
 
-async function update(host, id) {
-  const res = await fetch(`${server}/hosts/${id}`, {
+async function update(path, host, id) {
+  const res = await fetch(`${server}${path}/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -36,8 +36,8 @@ async function update(host, id) {
   return await res.json();
 }
 
-async function remove(id) {
-  const res = await fetch(`${server}/hosts/${id}`, {
+async function remove(path, id) {
+  const res = await fetch(`${server}${path}/${id}`, {
     method: 'DELETE',
   });
 

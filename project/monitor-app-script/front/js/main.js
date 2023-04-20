@@ -1,6 +1,7 @@
 import 'bootstrap';
 import { Modal } from 'bootstrap';
-import Host from './hosts.js';
+import { createLineChart, updateLineChart } from './chart.js';
+import API from './api.js';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -36,6 +37,16 @@ function createHostView(host) {
 
     confirmModal.show();
   };
+
+  const stopWatchIcon = rowTag.querySelector('.fa-stopwatch');
+
+  stopWatchIcon.onclick = async function () {
+    const latencies = await API.read(`/hosts/${host.id}/latencies`);
+
+    const times = latencies.map((latency) => latency.value);
+
+    updateLineChart(times);
+  };
 }
 
 function removeHostView(id) {
@@ -50,7 +61,7 @@ function loadRemoveHostModalHandler() {
   const confirmBtn = document.querySelector('.modal .btn-primary');
 
   confirmBtn.onclick = async function () {
-    await Host.remove(removeHostId);
+    await API.remove('/hosts', removeHostId);
 
     removeHostView(removeHostId);
   };
@@ -68,7 +79,7 @@ function loadSubmitHandler() {
 
     const host = { name, address };
 
-    const newHost = await Host.create(host);
+    const newHost = await API.create('/hosts', host);
 
     createHostView(newHost);
 
@@ -82,10 +93,12 @@ const confirmModal = new Modal(document.getElementById('confirmModal'));
 
 let removeHostId;
 
-const hosts = await Host.read();
+const hosts = await API.read('/hosts');
 
 loadHostsView(hosts);
 
 loadSubmitHandler();
 
 loadRemoveHostModalHandler();
+
+createLineChart('chart-line');

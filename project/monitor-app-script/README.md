@@ -22,6 +22,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [Font Awesome](https://fontawesome.com/)
 - [Vite](https://vitejs.dev/)
 - [JSON Server](https://www.npmjs.com/package/json-server)
+- [Chart.js](https://www.chartjs.org/)
 
 ## Layout
 
