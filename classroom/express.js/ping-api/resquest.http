@@ -1,0 +1,4 @@
+### Ping API
+
+GET http://localhost:3000/ping?host=8.8.8.8
+
