@@ -37,6 +37,8 @@ server.delete('/hosts/:hostId', (req, res) => {
   const index = data.hosts.findIndex((host) => host.id === id);
 
   data.hosts.splice(index, 1);
+
+  res.sendStatus(204);
 });
 
 server.get('/hosts/:hostId/latencies', async (req, res) => {

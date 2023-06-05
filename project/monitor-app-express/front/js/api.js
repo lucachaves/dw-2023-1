@@ -41,7 +41,7 @@ async function remove(path, id) {
     method: 'DELETE',
   });
 
-  return await res.json();
+  return res.status === 204;
 }
 
 export default {
