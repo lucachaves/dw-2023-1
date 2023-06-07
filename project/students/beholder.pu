@@ -1,0 +1,32 @@
+@startuml
+hide circle
+scale 1.5
+skinparam linetype ortho
+skinparam monochrome true
+left to right direction
+
+entity "usuarios" as usuarios {
+  *id : int
+  name : varchar(60)
+  email : varchar(100)
+  senha : varchar(100)
+}
+
+entity "maquinas" as maquinas {
+  *id : int
+  hostname : VARCHAR(20)
+  username : VARCHAR(60)
+  password : VARCHAR(200)
+}
+
+entity "metricas" as metricas {
+  *id : int
+  origem : VARCHAR
+  tipo : VARCHAR
+  valor : VARCHAR
+  criado_em : DATETIME
+  *maquina_id : INT <<FK>>
+}
+
+maquinas ||--|{ metricas
+@enduml
