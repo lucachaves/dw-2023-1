@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getPing } from './lib/ping.js';
 import Host from './models/Host.js';
-import Latency from './models/Latency.js';
+import Reachability from './models/Reachability.js';
 
 class HTTPError extends Error {
   constructor(message, code) {
@@ -75,13 +75,13 @@ router.post('/hosts/:id/latencies', async (req, res) => {
 
   const times = ping.times.map((time) => ({ value: time }));
 
-  const latency = {
+  const reachability = {
     transmitted: 3,
     received: ping.times.length,
-    host_id: id,
+    hostId: id,
   };
 
-  await Latency.create(latency);
+  await Reachability.create(reachability);
 
   res.json(times);
 });
@@ -89,7 +89,7 @@ router.post('/hosts/:id/latencies', async (req, res) => {
 router.get('/hosts/:id/latencies', async (req, res) => {
   const id = Number(req.params.id);
 
-  const latencies = await Latency.readByHost(id);
+  const latencies = await Reachability.readByHost(id);
 
   if (id && latencies) {
     res.json(latencies);
@@ -99,7 +99,7 @@ router.get('/hosts/:id/latencies', async (req, res) => {
 });
 
 router.get('/latencies', async (req, res) => {
-  const latencies = await Latency.readAll();
+  const latencies = await Reachability.readAll();
 
   res.json(latencies);
 });

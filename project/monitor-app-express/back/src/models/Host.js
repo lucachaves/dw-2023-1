@@ -1,90 +1,46 @@
-import Database from '../database/database.js';
+import prisma from '../database/index.js';
 
 async function create(host) {
-  const db = await Database.connect();
+  const newHost = await prisma.host.create({
+    data: host,
+  });
 
-  const { name, address } = host;
-
-  const sql = `
-    INSERT INTO
-      hosts (name, address)
-    VALUES
-      (?, ?)
-  `;
-
-  const { lastID } = await db.run(sql, [name, address]);
-
-  return read(lastID);
+  return newHost;
 }
 
 async function readAll() {
-  const db = await Database.connect();
-
-  const sql = `
-    SELECT
-      id, name, address
-    FROM
-      hosts
-  `;
-
-  const hosts = await db.all(sql);
+  const hosts = await prisma.host.findMany();
 
   return hosts;
 }
 
 async function read(id) {
-  const db = await Database.connect();
+  const host = await prisma.host.findFirst({
+    where: {
+      id,
+    },
+  });
 
-  const sql = `
-    SELECT
-      id, name, address
-    FROM
-      hosts
-    WHERE
-      id = ?
-  `;
-
-  const hosts = await db.get(sql, [id]);
-
-  return hosts;
+  return host;
 }
 
 async function update(host, id) {
-  const db = await Database.connect();
+  const newHost = await prisma.host.update({
+    data: host,
+    where: {
+      id,
+    },
+  });
 
-  const { name, address } = host;
-
-  const sql = `
-    UPDATE
-      hosts
-    SET
-      name = ?, address = ?
-    WHERE
-      id = ?
-  `;
-
-  const { changes } = await db.run(sql, [name, address, id]);
-
-  if (changes === 1) {
-    return read(id);
-  } else {
-    return false;
-  }
+  return newHost;
 }
 
 async function remove(id) {
-  const db = await Database.connect();
-
-  const sql = `
-    DELETE FROM
-      hosts
-    WHERE
-      id = ?
-  `;
-
-  const { changes } = await db.run(sql, [id]);
-
-  return changes === 1;
+  await prisma.host.delete({
+    where: {
+      id,
+    },
+  });
 }
 
 export default {
