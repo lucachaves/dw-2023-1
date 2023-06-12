@@ -1,0 +1,31 @@
+@baseUrl  = http://localhost:3000
+@createdHostId = {{createHost.response.body.$.id}}
+
+### Create a new Host
+
+# @name createHost
+POST {{baseUrl}}/hosts
+Content-Type: application/json
+
+{
+  "name": "google search",
+  "address": "www.google.com"
+}
+
+### Read all hosts
+
+GET {{baseUrl}}/hosts
+
+### Update a Investment
+
+PUT {{baseUrl}}/hosts/{{createdHostId}}
+Content-Type: application/json
+
+{
+  "name": "Google Search",
+  "address": "www.google.com"
+}
+
+### Delete a Investment
+
+DELETE {{baseUrl}}/hosts/{{createdHostId}}
