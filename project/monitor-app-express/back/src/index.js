@@ -1,16 +1,12 @@
+import 'express-async-errors';
 import express from 'express';
 import morgan from 'morgan';
 import router from './routes.js';
+import { cors } from './middleware/cors.js';
 
 const server = express();
 
-// cors
-server.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', '*');
-  res.setHeader('Access-Control-Allow-Headers', '*');
-  next();
-});
+server.use(cors);
 
 server.use(morgan('tiny'));
 

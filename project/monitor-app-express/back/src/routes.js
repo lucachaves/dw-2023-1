@@ -1,41 +1,122 @@
 import { Router } from 'express';
-import data from './data.js';
 import { getPing } from './lib/ping.js';
+import Host from './models/Host.js';
+import Latency from './models/Latency.js';
+
+class HTTPError extends Error {
+  constructor(message, code) {
+    super(message);
+    this.code = code;
+  }
+}
 
 const router = Router();
 
-router.get('/hosts', (req, res) => {
-  res.json(data.hosts);
-});
-
-router.post('/hosts', (req, res) => {
+router.post('/hosts', async (req, res) => {
   const host = req.body;
 
-  const newHost = { ...host, id: data.hosts.length + 1 };
+  const newHost = await Host.create(host);
 
-  data.hosts.push(newHost);
-
-  res.json(newHost);
+  if (newHost) {
+    res.json(newHost);
+  } else {
+    throw new HTTPError('Invalid data to create host', 400);
+  }
 });
 
-router.delete('/hosts/:hostId', (req, res) => {
-  const id = Number(req.params.hostId);
+router.get('/hosts', async (req, res) => {
+  const hosts = await Host.readAll();
 
-  const index = data.hosts.findIndex((host) => host.id === id);
-
-  data.hosts.splice(index, 1);
-
-  res.sendStatus(204);
+  res.json(hosts);
 });
 
-router.get('/hosts/:hostId/latencies', async (req, res) => {
-  const id = Number(req.params.hostId);
+router.get('/hosts/:id', async (req, res) => {
+  const id = Number(req.params.id);
 
-  const host = data.hosts.filter((host) => host.id === id)[0];
+  const host = await Host.read(id);
+
+  if (id && host) {
+    res.json(host);
+  } else {
+    throw new HTTPError('Invalid id to read host', 400);
+  }
+});
+
+router.put('/hosts/:id', async (req, res) => {
+  const id = Number(req.params.id);
+
+  const host = req.body;
+
+  if (id && host) {
+    const newHost = await Host.update(host, id);
+
+    res.json(newHost);
+  } else {
+    throw new HTTPError('Invalid data to update host', 400);
+  }
+});
+
+router.delete('/hosts/:id', async (req, res) => {
+  const id = Number(req.params.id);
+
+  if (id && (await Host.remove(id))) {
+    res.sendStatus(204);
+  } else {
+    throw new HTTPError('Id is required to remove host', 400);
+  }
+});
+
+router.post('/hosts/:id/latencies', async (req, res) => {
+  const id = Number(req.params.id);
+
+  const host = await Host.read(id);
 
   const ping = await getPing(host.address);
 
-  res.json(ping.times.map((time) => ({ value: time })));
+  const times = ping.times.map((time) => ({ value: time }));
+
+  const latency = {
+    transmitted: 3,
+    received: ping.times.length,
+    host_id: id,
+  };
+
+  await Latency.create(latency);
+
+  res.json(times);
+});
+
+router.get('/hosts/:id/latencies', async (req, res) => {
+  const id = Number(req.params.id);
+
+  const latencies = await Latency.readByHost(id);
+
+  if (id && latencies) {
+    res.json(latencies);
+  } else {
+    throw new HTTPError('Invalid id to read host', 400);
+  }
+});
+
+router.get('/latencies', async (req, res) => {
+  const latencies = await Latency.readAll();
+
+  res.json(latencies);
+});
+
+// 404 handler
+router.use((req, res, next) => {
+  res.status(404).json({ message: 'Content not found!' });
+});
+
+// Error handler
+router.use((err, req, res, next) => {
+  // console.error(err.stack);
+  if (err instanceof HTTPError) {
+    res.status(err.code).json({ message: err.message });
+  } else {
+    res.status(500).json({ message: 'Something broke!' });
+  }
 });
 
 export default router;

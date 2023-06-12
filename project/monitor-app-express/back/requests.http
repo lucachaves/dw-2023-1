@@ -16,7 +16,11 @@ Content-Type: application/json
 
 GET {{baseUrl}}/hosts
 
-### Update a Investment
+### Read a host
+
+GET {{baseUrl}}/hosts/{{createdHostId}}
+
+### Update a host
 
 PUT {{baseUrl}}/hosts/{{createdHostId}}
 Content-Type: application/json
@@ -26,6 +30,18 @@ Content-Type: application/json
   "address": "www.google.com"
 }
 
-### Delete a Investment
+### Delete a host
 
 DELETE {{baseUrl}}/hosts/{{createdHostId}}
+
+### Create latency
+
+POST {{baseUrl}}/hosts/{{createdHostId}}/latencies
+
+### Read latencies by Host
+
+GET {{baseUrl}}/hosts/{{createdHostId}}/latencies
+
+### Read all latencies
+
+GET {{baseUrl}}/latencies/
