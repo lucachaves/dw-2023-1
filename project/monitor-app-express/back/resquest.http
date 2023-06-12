@@ -1,0 +1,47 @@
+@baseUrl = http://localhost:3000
+@createdHostId = {{createHost.response.body.$.id}}
+
+### Create Host
+
+# @name createHost
+POST {{baseUrl}}/hosts
+Content-Type: application/json
+
+{
+  "name": "google search",
+  "address": "www.google.com"
+}
+
+### Read Hosts
+
+GET {{baseUrl}}/hosts
+
+### Read a host
+
+GET {{baseUrl}}/hosts/{{createdHostId}}
+
+### Update a host
+
+PUT {{baseUrl}}/hosts/{{createdHostId}}
+Content-Type: application/json
+
+{
+  "name": "Google Search",
+  "address": "www.google.com"
+}
+
+### Delete a host
+
+DELETE {{baseUrl}}/hosts/{{createdHostId}}
+
+### Create latency
+
+POST {{baseUrl}}/hosts/{{createdHostId}}/latencies
+
+### Read latencies by Host
+
+GET {{baseUrl}}/hosts/{{createdHostId}}/latencies
+
+### Read all latencies
+
+GET {{baseUrl}}/latencies/
