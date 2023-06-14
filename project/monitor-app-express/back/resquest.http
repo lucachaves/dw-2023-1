@@ -34,14 +34,14 @@ Content-Type: application/json
 
 DELETE {{baseUrl}}/hosts/{{createdHostId}}
 
-### Create latency
+### Create reachability
 
-POST {{baseUrl}}/hosts/{{createdHostId}}/latencies
+POST {{baseUrl}}/hosts/{{createdHostId}}/reachabilities
 
-### Read latencies by Host
+### Read reachabilities by Host
 
-GET {{baseUrl}}/hosts/{{createdHostId}}/latencies
+GET {{baseUrl}}/hosts/{{createdHostId}}/reachabilities
 
-### Read all latencies
+### Read all reachabilities
 
-GET {{baseUrl}}/latencies/
+GET {{baseUrl}}/reachabilities
