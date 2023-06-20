@@ -1,6 +1,12 @@
 import { Router } from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
 import { getPing } from './lib/ping.js';
+import { isAuthenticated } from './middleware/auth.js';
+
 import Host from './models/Host.js';
+import User from './models/User.js';
 import Reachability from './models/Reachability.js';
 
 class HTTPError extends Error {
@@ -12,7 +18,47 @@ class HTTPError extends Error {
 
 const router = Router();
 
-router.post('/hosts', async (req, res) => {
+router.post('/users', async (req, res) => {
+  const user = req.body;
+
+  delete user.confirmationPassword;
+
+  const newUser = await User.create(user);
+
+  res.status(201).json(newUser);
+});
+
+router.get('/users', isAuthenticated, async (req, res) => {
+  const users = await User.readAll();
+
+  res.json(users);
+});
+
+router.post('/signin', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const { id: userId, password: hash } = await User.readByEmail(email);
+
+    const match = await bcrypt.compare(password, hash);
+
+    if (match) {
+      const token = jwt.sign(
+        { userId },
+        process.env.SECRET,
+        { expiresIn: 3600 } // 1h
+      );
+
+      res.json({ auth: true, token });
+    } else {
+      throw new Error('User not found');
+    }
+  } catch (error) {
+    res.status(401).json({ error: 'User not found' });
+  }
+});
+
+router.post('/hosts', isAuthenticated, async (req, res) => {
   const host = req.body;
 
   const newHost = await Host.create(host);
@@ -24,13 +70,13 @@ router.post('/hosts', async (req, res) => {
   }
 });
 
-router.get('/hosts', async (req, res) => {
+router.get('/hosts', isAuthenticated, async (req, res) => {
   const hosts = await Host.readAll();
 
   res.json(hosts);
 });
 
-router.get('/hosts/:id', async (req, res) => {
+router.get('/hosts/:id', isAuthenticated, async (req, res) => {
   const id = Number(req.params.id);
 
   const host = await Host.read(id);
@@ -42,7 +88,7 @@ router.get('/hosts/:id', async (req, res) => {
   }
 });
 
-router.put('/hosts/:id', async (req, res) => {
+router.put('/hosts/:id', isAuthenticated, async (req, res) => {
   const id = Number(req.params.id);
 
   const host = req.body;
@@ -56,7 +102,7 @@ router.put('/hosts/:id', async (req, res) => {
   }
 });
 
-router.delete('/hosts/:id', async (req, res) => {
+router.delete('/hosts/:id', isAuthenticated, async (req, res) => {
   const id = Number(req.params.id);
 
   if (id && (await Host.remove(id))) {
@@ -66,7 +112,7 @@ router.delete('/hosts/:id', async (req, res) => {
   }
 });
 
-router.post('/hosts/:id/latencies', async (req, res) => {
+router.post('/hosts/:id/latencies', isAuthenticated, async (req, res) => {
   const id = Number(req.params.id);
 
   const host = await Host.read(id);
@@ -86,7 +132,7 @@ router.post('/hosts/:id/latencies', async (req, res) => {
   res.json(times);
 });
 
-router.get('/hosts/:id/latencies', async (req, res) => {
+router.get('/hosts/:id/latencies', isAuthenticated, async (req, res) => {
   const id = Number(req.params.id);
 
   const latencies = await Reachability.readByHost(id);
@@ -98,7 +144,7 @@ router.get('/hosts/:id/latencies', async (req, res) => {
   }
 });
 
-router.get('/latencies', async (req, res) => {
+router.get('/latencies', isAuthenticated, async (req, res) => {
   const latencies = await Reachability.readAll();
 
   res.json(latencies);

@@ -1,10 +1,51 @@
 @baseUrl  = http://localhost:3000
 @createdHostId = {{createHost.response.body.$.id}}
+@token = {{signin.response.body.$.token}}
+
+### Create User
+
+# @name createUser
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Luiz",
+  "email": "luiz@email.com",
+  "password": "123"
+}
+
+### Signin
+
+# @name signin
+POST {{baseUrl}}/signin
+Content-Type: application/json
+
+{
+  "email": "luiz@email.com",
+  "password": "123"
+}
+
+### Signin 401
+
+# @name signin
+POST {{baseUrl}}/signin
+Content-Type: application/json
+
+{
+  "email": "luiz@email.com",
+  "password": "321"
+}
+
+### List Users
+
+GET {{baseUrl}}/users
+Authorization: bearer {{token}}
 
 ### Create a new Host
 
 # @name createHost
 POST {{baseUrl}}/hosts
+Authorization: bearer {{token}}
 Content-Type: application/json
 
 {
@@ -15,14 +56,17 @@ Content-Type: application/json
 ### Read all hosts
 
 GET {{baseUrl}}/hosts
+Authorization: bearer {{token}}
 
 ### Read a host
 
 GET {{baseUrl}}/hosts/{{createdHostId}}
+Authorization: bearer {{token}}
 
 ### Update a host
 
 PUT {{baseUrl}}/hosts/{{createdHostId}}
+Authorization: bearer {{token}}
 Content-Type: application/json
 
 {
@@ -33,15 +77,19 @@ Content-Type: application/json
 ### Delete a host
 
 DELETE {{baseUrl}}/hosts/{{createdHostId}}
+Authorization: bearer {{token}}
 
 ### Create latency
 
 POST {{baseUrl}}/hosts/{{createdHostId}}/latencies
+Authorization: bearer {{token}}
 
 ### Read latencies by Host
 
 GET {{baseUrl}}/hosts/{{createdHostId}}/latencies
+Authorization: bearer {{token}}
 
 ### Read all latencies
 
 GET {{baseUrl}}/latencies/
+Authorization: bearer {{token}}

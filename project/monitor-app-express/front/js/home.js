@@ -1,6 +1,7 @@
 import 'bootstrap';
 import { Modal } from 'bootstrap';
 import { createLineChart, updateLineChart } from './chart.js';
+import Auth from './auth.js';
 import API from './api.js';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -41,7 +42,7 @@ function createHostView(host) {
   const stopWatchIcon = rowTag.querySelector('.fa-stopwatch');
 
   stopWatchIcon.onclick = async function () {
-    const latencies = await API.read(`/hosts/${host.id}/latencies`);
+    const latencies = await API.create(`/hosts/${host.id}/latencies`);
 
     const times = latencies.map((latency) => latency.value);
 
@@ -89,16 +90,20 @@ function loadSubmitHandler() {
   };
 }
 
-const confirmModal = new Modal(document.getElementById('confirmModal'));
+window.signout = Auth.signout;
 
 let removeHostId;
 
-const hosts = await API.read('/hosts');
+const confirmModal = new Modal(document.getElementById('confirmModal'));
 
-loadHostsView(hosts);
+if (Auth.isAuthenticated()) {
+  const hosts = await API.read('/hosts');
 
-loadSubmitHandler();
+  loadHostsView(hosts);
 
-loadRemoveHostModalHandler();
+  loadSubmitHandler();
 
-createLineChart('chart-line');
+  loadRemoveHostModalHandler();
+
+  createLineChart('chart-line');
+}
