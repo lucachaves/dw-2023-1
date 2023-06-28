@@ -1,5 +1,40 @@
 @baseUrl = http://localhost:3000
 @createdHostId = {{createHost.response.body.$.id}}
+@token = {{signin.response.body.$.token}}
+
+### Create User
+
+# @name createUser
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Luiz",
+  "email": "luiz@email.com",
+  "password": "123"
+}
+
+### Signin
+
+# @name signin
+POST {{baseUrl}}/signin
+Content-Type: application/json
+
+{
+  "email": "luiz@email.com",
+  "password": "123"
+}
+
+### Signin 401
+
+# @name signin
+POST {{baseUrl}}/signin
+Content-Type: application/json
+
+{
+  "email": "luiz@email.com",
+  "password": "321"
+}
 
 ### Create Host
 
@@ -15,15 +50,18 @@ Content-Type: application/json
 ### Read Hosts
 
 GET {{baseUrl}}/hosts
+Authorization: bearer {{token}}
 
 ### Read a host
 
 GET {{baseUrl}}/hosts/{{createdHostId}}
+Authorization: bearer {{token}}
 
 ### Update a host
 
 PUT {{baseUrl}}/hosts/{{createdHostId}}
 Content-Type: application/json
+Authorization: bearer {{token}}
 
 {
   "name": "Google Search",
@@ -33,15 +71,19 @@ Content-Type: application/json
 ### Delete a host
 
 DELETE {{baseUrl}}/hosts/{{createdHostId}}
+Authorization: bearer {{token}}
 
 ### Create reachability
 
 POST {{baseUrl}}/hosts/{{createdHostId}}/reachabilities
+Authorization: bearer {{token}}
 
 ### Read reachabilities by Host
 
 GET {{baseUrl}}/hosts/{{createdHostId}}/reachabilities
+Authorization: bearer {{token}}
 
 ### Read all reachabilities
 
 GET {{baseUrl}}/reachabilities
+Authorization: bearer {{token}}

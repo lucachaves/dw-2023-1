@@ -1,162 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Monitor App</title>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container">
-        <a class="navbar-brand" href="#">Monitor App</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Sair</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitor App</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
-      <h1 class="text-center my-5">Monitor App</h1>
-      <div class="row">
-        <div class="col">
-          <div class="card">
-            <div class="card-header text-center fw-bold fs-4">
-              Hosts
-              <button
-                class="float-end lh-base btn btn-link link-dark"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasRight"
-                aria-controls="offcanvasRight"
-              >
-                <i class="fa-solid fa-plus"></i>
-              </button>
-            </div>
-            <div class="card-body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Endereço</th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody class="table-group-divider"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card">
-            <div class="card-header text-center fw-bold fs-4">
-              Latência (ms)
-            </div>
-            <div class="card-body">
-              <canvas id="chart-line"></canvas>
-            </div>
-          </div>
-        </div>
+      <a class="navbar-brand" href="#">Monitor App</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="signout()">Sair</a>
+          </li>
+        </ul>
       </div>
     </div>
-
-    <div
-      class="modal fade"
-      id="confirmModal"
-      tabindex="-1"
-      aria-labelledby="confirmModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="confirmModalLabel">
-              Remover host
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">Deseja de fato excluir o host?</div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Fechar
+  </nav>
+  <div class="container">
+    <h1 class="text-center my-5">Monitor App</h1>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-header text-center fw-bold fs-4">
+            Hosts
+            <button class="float-end lh-base btn btn-link link-dark" type="button" data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+              <i class="fa-solid fa-plus"></i>
             </button>
-            <button type="button" class="btn btn-primary">Confirmar</button>
+          </div>
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Nome</th>
+                  <th scope="col">Endereço</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody class="table-group-divider"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-header text-center fw-bold fs-4">
+            Latência (ms)
+          </div>
+          <div class="card-body">
+            <canvas id="chart-line"></canvas>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div
-      class="offcanvas offcanvas-end"
-      tabindex="-1"
-      id="offcanvasRight"
-      aria-labelledby="offcanvasRightLabel"
-    >
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasRightLabel">
-          Cadastro de Host
-        </h5>
-        <button
-          type="button"
-          id="close-offcanvas"
-          class="btn-close"
-          data-bs-dismiss="offcanvas"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="offcanvas-body">
-        <form>
-          <div class="mb-3">
-            <label for="name" class="form-label">Nome</label>
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              placeholder="Google Search"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="address" class="form-label">Endereço</label>
-            <input
-              type="text"
-              class="form-control"
-              id="address"
-              placeholder="www.google.com"
-            />
-          </div>
-          <div>
-            <button type="submit" class="btn btn-secondary">Cadastrar</button>
-          </div>
-        </form>
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="confirmModalLabel">
+            Remover host
+          </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">Deseja de fato excluir o host?</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Fechar
+          </button>
+          <button type="button" class="btn btn-primary">Confirmar</button>
+        </div>
       </div>
     </div>
+  </div>
 
-    <script type="module" src="/js/main.js"></script>
-  </body>
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasRightLabel">
+        Cadastro de Host
+      </h5>
+      <button type="button" id="close-offcanvas" class="btn-close" data-bs-dismiss="offcanvas"
+        aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <form>
+        <div class="mb-3">
+          <label for="name" class="form-label">Nome</label>
+          <input type="text" class="form-control" id="name" placeholder="Google Search" />
+        </div>
+        <div class="mb-3">
+          <label for="address" class="form-label">Endereço</label>
+          <input type="text" class="form-control" id="address" placeholder="www.google.com" />
+        </div>
+        <div>
+          <button type="submit" class="btn btn-secondary">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/js/index.js"></script>
+</body>
+
 </html>
